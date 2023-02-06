@@ -1,0 +1,80 @@
+{% extends 'index/base.html'%}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+  <div class="card bg-dark text-white">
+    <div class="card-header mb-5">
+      <div class="card-title">
+        <div class="position-relative">
+          <div class="position-absolute top-0 start-0">
+            <h1> Meetings </h1>
+          </div>
+          <div class="position-absolute top-0 end-0  me-5 my-2">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group me-2" role="group" aria-label="Search">
+                <a type="button" href="{% url 'index:meetings' %}" class="btn btn-secondary p-2">
+                  <i class="fas fa-search fa-lg"></i>
+                  Search
+                </a>
+              </div>
+              <div class="btn-group ms-2" role="group" aria-label="Create">
+                <a type="button" href="{% url 'index:addmeeting' %}" class="btn btn-secondary p-2">
+                  <i class="fa-regular fa-calendar-plus fa-lg"></i>
+                  Create
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Members</th>
+            <th scope="col">Date</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
+          </tr>  
+        </thead>
+        <tbody>
+          {% if user.usermeeting_set.all %}
+          {% for meeting in user.usermeeting_set.all %}
+          <tr>
+            <td>{{meeting.meeting.title_text}}</td>
+            <td>{{meeting.meeting.description_text}}</td>
+            <td>
+              {% if meeting.meeting.member_set.all %}
+              <ul style="list-style: none; padding-left: 0;">
+                {% for member in meeting.meeting.member_set.all %}
+                <li>{{ member.member_text }}</li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              Empty
+              {% endif %}
+            </td>
+            <td>{{meeting.meeting.date}}</td>
+            <td>{{meeting.meeting.start_date}}</td>
+            <td>{{meeting.meeting.end_date}}</td>
+          </tr>
+          {% endfor %}  
+          {% else %}
+          <tr>
+            There are currently no meetings available.
+          </tr>
+          {% endif %}    
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+{% include 'index/signin-card.html' %}
+{% endif %}
+{% endblock %}

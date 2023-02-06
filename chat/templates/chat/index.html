@@ -1,0 +1,50 @@
+{# {% extends 'chat/base.html'%} #}
+{# {% block content %} #}
+
+
+{% load bootstrap5 %}     
+{% bootstrap_css %}    
+{% bootstrap_javascript %}
+{# {% bootstrap_messages %} #}
+<!-- chat/templates/chat/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Rooms</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'index/main.css' %}" />
+</head>
+<body>
+    {% include "index/navbar.html" %}
+    <main>
+        <div id="content">
+            <div class="d-flex flex-column align-items-center bd-highlight mb-3 text-light">
+                <div class="card bg-dark text-center my-5">
+                    <div class="card-header">
+                        Welcome to the Study Buddy Chat!
+                    </div>
+                    <form action="{% url 'chat:index' %}" method="POST">{% csrf_token %}
+                        <div class="card-body">
+                            <input  name="room" type="text" class="form-control"
+                                    placeholder="Enter chat name"
+                                    aria-label="Chat room name"
+                                    size="100" />
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                Join chat!
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>            
+            <!-- shadow content for testing the scroll -->
+            {# {% for i in '0123456789'|make_list %} #}
+            <!-- {# {% include "scroll-test.html" %} #} -->
+            {# {% endfor %} #}
+        </div>
+    </main>
+    {% include "index/footer.html" %}
+</body>
+</html>

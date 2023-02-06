@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat Rooms</title>
+    {% load bootstrap5 %}     
+    {% bootstrap_css %}    
+    {% bootstrap_javascript %}
+    {% load static %}
+    <script src="https://kit.fontawesome.com/8e4d5ae4fe.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'index/main.css' %}">
+</head>
+<body>
+{% include 'index/navbar.html' %}
+<main>
+  <div id="content">
+    <div class="container">
+      <div class="card bg-dark text-white">
+        <div class="card-header">
+          <div class="card-title">
+            <h1>Class search</h1>
+          </div>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'index:class_results' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <span class="input-group-text bg-dark text-light" id="dept-addon">Class subject department</span>
+              <input name="searchDept" type="text" class="form-control" placeholder="ex: APMA" />
+              <button name="search" type="submit" class="btn btn-secondary">Search</button>  
+            </div>
+          </form>      
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% include 'index/footer.html' %}
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    let row_count = document.querySelector('tbody tr').length
+    if (row_count > 5) {
+      console.log(rowCount)
+      document.querySelector('table').classList.add('scrollable')
+    }
+  })
+</script>
+</html>

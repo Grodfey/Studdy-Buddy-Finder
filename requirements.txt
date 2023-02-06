@@ -1,0 +1,31 @@
+asgiref
+asgi-redis
+channels
+channels_redis
+chromedriver-py
+# Inferior bootstrap template pack, can't even use bootstrap without loading crispy-forms...
+# crispy-bootstrap5
+daphne
+#           #       #                               #           #
+Django~=4.1.2
+#           #       #                               #           #
+django-allauth
+# The superior bootstrap template pack
+django-bootstrap-v5
+django-crispy-forms
+#           #       #                               #           #
+# potential replacement for dj-database-url
+# it is much more versatile for use with environment variables  #
+# Documentation:
+#    https://django-environ.readthedocs.io/en/latest/types.html#environ-env-db-url
+# django-environ==0.9.0
+#           #       #                               #           #
+django-request~=1.6.1
+gunicorn
+redis
+requests~=2.28.1
+selenium
+wheel
+#           #       #                               #           #
+# django-heroku     # Depends on psycopg2           #           #
+django-on-heroku    # Depends on psycopg2-binary    #           #

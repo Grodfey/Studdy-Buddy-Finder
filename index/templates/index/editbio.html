@@ -1,0 +1,72 @@
+{% extends 'index/base.html'%}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<link rel="stylesheet" href="{% static 'index/style.css' %}">
+{% block content %}
+{% load socialaccount %}
+{% if user.is_authenticated %}
+<div class="container">
+    <div class="card bg-dark">
+        <form method="post">{% csrf_token %}
+            <div class="card-header bottom-border border-white">
+                <div class="card-title">
+                    <h3> Edit Bio </h3>
+                </div>
+            </div>
+            <div class="card-body bottom-border border-white">
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="id_degree">Degree</label>
+                        </div>
+                        <div class="col">
+                            <label for="id_year">Year</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" name="degree" class="form-control" size="20" maxlength="200" placeholder="Degree" required id="id_degree" />
+                        </div>
+                        <div class="col">
+                            <input type="text" name="year" class="form-control" size="20" maxlength="50" placeholder="Year" placeholder="Year" required id="id_year" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_bio">Introduce yourself</label>
+                            <input type="text" name="bio" class="form-control" size="20" maxlength="500"
+                                placeholder="Bio" required id="id_bio">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top border-white">
+                <div class="container">
+                    <div class="container">
+                        <div class="d-flex flex-row justify-content-center">
+                            <div class="row">
+                                <div class="col mx-5">
+                                    <button type="submit" value="Update" class="btn btn-success">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                </div>
+                                <div class="col mx-5">
+                                    <a type="button" href="profile/" class="btn btn-danger">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% else %}
+{% include 'index/signin-card.html' %}
+{% endif %}
+{% endblock content %}

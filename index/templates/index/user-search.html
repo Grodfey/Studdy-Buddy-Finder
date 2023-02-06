@@ -1,0 +1,101 @@
+{% extends 'index/base.html'%}
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+{% block content %}
+<!-- https://ordinarycoders.com/blog/article/django-messages-framework -->
+<!--User page HTML-->
+
+<div class="container">
+  <div class="card bg-dark text-white">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="d-flex flex-row">
+          <div class="align-self-start flex-fill">
+            <h1> User search </h1>
+          </div>
+          <div class="align-self-end flex-fill">
+            {% if searched %}
+            <h2> {{ searched }} </h2>
+            {% endif %}
+          </div>
+        </div>
+        
+
+      </div>
+    </div>
+    <div class="card-body">
+      <form action="{% url 'index:usersearch' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          <span class="input-group-text bg-dark text-light" id="uname-addon">Search for user @</span>
+          <input class="form-control" name="searched" type="text" placeholder="Username" aria-label="Username" aria-describedby="uname-addon" />
+        </div>
+      </form>
+    </div>
+    <div class="card-footer">
+      {% if searched %}
+      <table class="table table-responsive caption-top text-light" style="background-color: #000000BF;">
+        <thead>
+          <tr>
+            <th scope="col" rowspan="2">First</th>
+            <th scope="col" rowspan="2">Last</th>
+            <th scope="col" rowspan="2">Username</th>
+            <th scope="col" colspan="3">Classes</th>
+            <th scope="col" rowspan="2"></th>
+          </tr>
+          <tr>
+            <td scope="col">Subject</td>
+            <td scope="col">Number</td>
+            <td scope="col">Section</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          {% if user.username == searched %}
+          <tr>
+            <td> {{user.first_name}} </td>
+            <td> {{user.last_name}} </td>
+            <td> {{user.username}} </td>
+            <td>
+              <ul style="list-style: none; padding-left: 0;">
+                {% for value_dict in user.userinfo_set.values %}
+                <li>{{ value_dict.class_subject }}</li>          
+                {% endfor %}
+              </ul>    
+            </td>
+            <td>
+              <ul style="list-style: none; padding-left: 0;">
+                {% for value_dict in user.userinfo_set.values %}
+                <li>{{ value_dict.class_number }}</li>          
+                {% endfor %}
+              </ul>    
+            </td>
+            <td>
+              <ul style="list-style: none; padding-left: 0;">
+                {% for value_dict in user.userinfo_set.values %}
+                <li>{{ value_dict.class_section }}</li>          
+                {% endfor %}
+              </ul>    
+            </td>
+            <td>
+              {# Redefining data via custom template tag see templatetags/tags.py for implementation #}    
+              {% load concat %}
+              {% concat user.first_name user.last_name "@" user.username as user_data %}  
+              <form action="{% url 'index:addedFriend' %}" method="post">
+                {% csrf_token %}
+                <button name="user_data" type="submit" class="btn btn-success" value="{{ user_data }}">
+                  <i class="fa-solid fa-heart-circle-check"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

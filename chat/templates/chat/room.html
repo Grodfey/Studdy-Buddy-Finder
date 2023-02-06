@@ -1,0 +1,73 @@
+{% extends 'index/base.html'%}
+{% load static %}
+{% block content %}
+<!-- chat/templates/chat/room.html -->
+<title>Chat Room</title>
+<div class="container">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
+            <div class="card-title">
+                {{ room_name }}
+            </div>
+        </div>
+        <div class="card-body" id="chat-log" style="height: 70vh;">
+            <!-- Chat messages go here -->
+        </div>
+        </textarea>
+        <div class="card-footer">
+            <div class="input-group">
+                <input id="chat-message-input" type="text" class="form-control" size="68" placeholder="Message" autofocus />
+                <button class="btn btn-outline-secondary" type="button" id="chat-message-submit" value="Send">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chat JS -->
+{{ user.username|json_script:"user-name" }}
+{{ room_name|json_script:"room-name" }}
+<script>
+    // chat room constants
+    // // chat setup
+    const room = JSON.parse(document.getElementById('room-name').textContent)
+    const protocol = (window.location.protocol === "https:" ? "wss://" : "ws://")
+    const socket = new WebSocket(`${protocol}${window.location.host}/ws/chat/${room}/`)
+    // // chat elements/data
+    const user = JSON.parse(document.getElementById('user-name').textContent)
+    const chat_input_msg_text = document.querySelector('#chat-message-input')
+    const chat_input_send_btn = document.querySelector('#chat-message-submit')
+    // Chat events
+    // // User sends message
+    socket.onmessage = function (e) {
+        // parse data
+        const chat = JSON.parse(e.data)
+        // log it        
+        console.log(chat)
+        // render it
+        const msg_html = document.createElement("p")
+        const text = document.createTextNode(`${chat.user} : ${chat.message}`)
+        // add it to chat
+        msg_html.appendChild(text)
+        document.querySelector('#chat-log').append(msg_html)
+    }
+    // // User leaves chat or gets disconnected
+    socket.onclose = (e) => console.error('Chat socket closed unexpectedly')
+    // // User pressed <ENTER>
+    window.addEventListener('keyup', (event) => {
+        if (event.keyCode === 13)
+            chat_input_send_btn.click()
+    })
+    // // User sent a message
+    chat_input_send_btn.onclick = (e) => {
+        const data = JSON.stringify({
+            'user': user,
+            'message': chat_input_msg_text.value
+        })
+        console.log(data)
+        socket.send(data)
+        chat_input_msg_text.value = ''
+    }
+</script>
+{% endblock %}

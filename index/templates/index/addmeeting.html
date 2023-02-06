@@ -1,0 +1,80 @@
+{% extends 'index/base.html'%}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="card bg-dark text-white">
+            <form action="{% url 'index:confirmMeeting' %}" method="post">{% csrf_token %}
+                <div class="card-header">
+                    <div class="card-title">
+                        <h3>New meeting</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Title -->
+                    <div class="row">
+                        <div class="col">
+                            <span>Title</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <textarea class="form-control" cols="55" rows="1" name="title"
+                                placeholder="Title"></textarea>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <div class="row">
+                        <div class="col">
+                            <span>Description</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <textarea class="form-control" cols="55" rows="2" name="description"
+                                placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                    <!-- Date -->
+                    <div class="row mt-5">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Date</span>
+                                <input type="date" name="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Time -->
+                    <div class="row">
+                        <div class="col">
+                            <label for="id_start">Start Time</label>
+                        </div>
+                        <div class="col">
+                            <label for="id_end">End Time</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-control" type="time" name="start" id="id_start" />
+                        </div>
+                        <div class="col">
+                            <input class="form-control" type="time" name="end" id="id_end" />
+                        </div>
+                    </div>
+                    {% if error_message %} {{ error_message }} {% endif %}
+                </div>
+                {% load concat %}
+                {% concat user.first_name user.last_name user.username sep="-" as user_name_info %}
+                <div class="card-footer">
+                    <button name="confirm" type="submit" class="btn btn-info" value="{{ user_name_info }}">
+                        Confirm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% else %}
+{% include 'index/signin-card.html' %}
+{% endif %}
+{% endblock %}

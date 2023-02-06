@@ -1,0 +1,50 @@
+{% extends 'index/base.html'%}
+{% block content %}
+{% if response %}
+<table class="table table-responsive table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Subject</th>
+      <th scope="col">Number</th>
+      <th scope="col">Course Section</th>
+      <th scope="col">Instructor</th>
+      <th scope="col">Email</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in response %}
+    <tr>
+      <td>{{i.subject}}</td>
+      <td>{{i.catalog_number}}</td>
+      <td>{{i.course_section}}</td>
+      <td>{{i.instructor.name}}</td>
+      <td>{{i.instructor.email}}</td>
+      <td>{{i.description}}</td>
+      <td>
+        <form action="{% url 'index:class_success' %}" method="get">
+          {% csrf_token %}
+          {% load concat %}
+          {% concat i.subject i.catalog_number i.course_section sep="-" as course_info %}
+          <button name="thatClass" type="submit" class="btn btn-info" value="{{ course_info }}">
+            Add Course
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="card bg-dark text-white">
+  <div class="card-header">
+    <div class="card-title">
+      <h1> Class Search Results </h1>
+    </div>
+  </div>
+  <div class="card-body">
+    <h3>There are no Classes that matched your search</h3>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

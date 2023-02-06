@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  {# {% bootstrap_messages %} #}
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'index/main.css' %}" />
+  <script src="https://kit.fontawesome.com/8e4d5ae4fe.js" crossorigin="anonymous"></script>
+  <style>
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: #CCCCCC80;
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'navbar.html' %}
+  <main>
+    <div id="content" class="container">
+      <div class="container">
+
+        {% load socialaccount %}
+        {% if user.is_authenticated %}
+        <div class="card mb-5 text-center text-light bg-dark" style="height: 45vh; overflow-y: scroll;">
+          <div class="container">
+            <div class="card-header">
+              <nav>
+                <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                    aria-selected="true">Profile</button>
+                  <button class="nav-link" id="nav-bio-tab" data-bs-toggle="tab" data-bs-target="#nav-bio" type="button"
+                    role="tab" aria-controls="nav-bio" aria-selected="false">Bio</button>
+                  <button class="nav-link" id="nav-classes-tab" data-bs-toggle="tab" data-bs-target="#nav-classes"
+                    type="button" role="tab" aria-controls="nav-classes" aria-selected="false">Classes</button>
+                  <button class="nav-link" id="nav-friends-tab" data-bs-toggle="tab" data-bs-target="#nav-friends"
+                    type="button" role="tab" aria-controls="nav-friends" aria-selected="false">Friends</button>
+                </div>
+              </nav>
+            </div>
+            <div class="card-body tab-content" id="nav-tabContent">
+              <div class="tab-pane show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <table class="table table-responsive text-light bg-dark">
+                  <thead>
+                    <th>Profile</th>
+                    <td>
+                      <a class="btn btn-secondary" href="{% url 'index:editprofile' %}">
+                        <i class="fa-solid fa-user-pen"></i>
+                      </a>
+                    </td>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <td scope="col">{{ user.first_name }} {{ user.last_name }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="col">Username</th>
+                      <td scope="col">{{ user.username }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="col">Email</th>
+                      <td scope="col">{{ user.email }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="nav-bio" role="tabpanel" aria-labelledby="nav-bio-tab">
+                <table class="table table-responsive text-light bg-dark">
+                  <thead>
+                    <th scope="col">Bio</th>
+                    <th scope="col">
+                      <a href="{% url 'index:editbio' %}">
+                        <button class="btn btn-secondary">
+                          <i class="fa-solid fa-file-pen"></i>
+                        </button>
+                      </a>
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="col">Major(s)/Minor(s)</th>
+                      <td scope="col">{{ degree }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="col">Year</th>
+                      <td scope="col">{{ year }}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"> {{ bio }} </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="nav-classes" role="tabpanel" aria-labelledby="nav-classes-tab">
+                <table class="table table-responsive caption-top text-light bg-dark">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="2">Classes</th>
+                      <td scope="col" colspan="2">
+                        <a class="btn btn-secondary" href="{% url 'index:class_search' %}">
+                          <i class="fa-solid fa-cart-plus" style="transform: scaleX(-1) !important;"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    {% if user.userinfo_set.all %}
+                    <tr>
+                      <th scope="col">Subject</th>
+                      <th scope="col">Number</th>
+                      <th scope="col">Section</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <form action="{% url 'index:removeClass' %}" method="post" style="display: inline;">
+                      {% csrf_token %}
+                      {% for class in user.userinfo_set.all %}
+                      <tr>
+                        <td>{{ class.class_subject }}</td>
+                        <td>{{ class.class_number }}</td>
+                        <td>{{ class.class_section }}</td>
+                        <td>
+                          <button name="remove_class" type="submit" class="btn btn-danger" value="{{ class.id }}">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </form>
+                    {% else %}
+                    <tr>
+                      <h5> You haven't added any classes! Click the button to search for classes </h5>
+                    </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
+                
+                <form action="{% url 'index:removeFriend' %}" method="POST">
+                  {% csrf_token %}
+                  <table class="table table-responsive text-light bg-dark">
+                    <thead>
+                      <tr>
+                        <th scope="col">Friends</th>
+                        <th scope="col">
+                          <a href="{% url 'index:usersearch' %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-user-plus"></i>
+                          </a>
+                        </th>
+                        <th scope="col"></th>
+                      </tr>
+                      {% if user.friend_set.all %}
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Username</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    {% for friend in user.friend_set.all %}
+                    <tr>
+                      <td>{{ friend.addee_nom }}</td>
+                      <td>{{ friend.addee_uid }}</td>
+                      <td>
+                        <button name="remove_friend" type="submit" class="btn btn-danger"
+                          value="{{ friend.addee_uid }}">
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                      <h5> Your friends list is empty, click the friends button to look up your friends </h5>
+                    </tr>
+                    {% endif %}
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        {% include 'sigin-card.html' %}
+        {% endif %}
+
+      </div>
+    </div>
+  </main>
+  {% include 'footer.html' %}
+</body>
+
+</html>

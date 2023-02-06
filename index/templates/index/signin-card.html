@@ -1,0 +1,32 @@
+{% load socialaccount %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'index/google.css' %}" />
+
+<div class="card bg-dark text-white rounded rounded-3">
+    <div class="card-header my-5 mx-5 border-bottom border-white">
+        <div class="card-title">
+            <h3> User not logged in </h3>
+        </div>
+    </div>
+    <div class="card-body my-5 mx-5">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    You aren't logged in.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Sign in to continue.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer my-5 mx-5 border-top border-white">
+        <div class="d-flex align-content-center justify-content-center">
+            <a type="button" href="{% provider_login_url 'google' %}" class="login-with-google-btn">
+                Sign in with Google
+            </a>    
+        </div>
+    </div>
+</div>

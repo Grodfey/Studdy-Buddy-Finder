@@ -1,0 +1,17 @@
+{% extends 'index/base.html'%}
+{% load static %}
+<link rel="stylesheet" href="{% static 'index/style.css' %}">
+{% block content %}
+
+<!--User page HTML-->
+
+<body>
+	<div class="centered">
+		<br>
+		<h1>Successfully Added Friend</h1>
+		<br>
+		<a href="{% url 'index:usersearch' %}" class="btn btn-info">Add Another Friend</a>
+		<a href="{% url 'index:profile' %}" class="btn btn-info">View profile</a>
+	</div>
+</body>
+{% endblock %}

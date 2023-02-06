@@ -1,0 +1,125 @@
+{% extends 'index/base.html'%}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'index/style.css' %}">
+{% block content %}
+
+<!--User page HTML-->
+<div class="text-center">
+    {% load socialaccount %}
+    <html>
+
+    <body>
+        {% if user.is_authenticated %}
+        <div class="container">
+            <div class="card mt-5 bg-dark">
+                <div class="card-header mb-3 border-bottom border-white">
+                    <h1 class="card-title"> Edit Profile </h1>
+                </div>
+                <form method="POST">{% csrf_token %}
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <div class="container">
+                                <div class="d-flex flex-row">
+                                    <div class="input-group mb-3 position-relative">
+                                        <div class="position-absolute top-0 start-0 translate-middle-y text-white mx-5">
+                                            First name
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3 position-relative">
+                                        <div class="position-absolute top-0 start-0 translate-middle-y text-white mx-5">
+                                            Last name
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div class="input-group mb-3 position-relative">
+                                        <input type="text" name="first_name" value="{{ user.first_name }}"
+                                            class="form-control mx-5" size="20" maxlength="20" required
+                                            id="id_first_name" />
+                                    </div>
+                                    <div class="input-group mb-3 position-relative">
+                                        <input type="text" name="last_name" value="{{ user.last_name }}"
+                                            class="form-control mx-5" size="20" maxlength="20" required
+                                            id="id_last_name" />
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div class="input-group mt-3 mb-3 position-relative">
+                                        <div class="position-absolute top-50 start-50 translate-middle text-white">
+                                            Username
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div class="container">
+                                        <div class="container">
+                                            <div class="container">
+                                                <div class="container">
+                                                    <div class="input-group mb-3 position-relative">
+                                                        <input type="text" name="username" value="{{ user.username }}"
+                                                            class="form-control" size="20" maxlength="20"
+                                                            placeholder="Username" required id="id_username">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div class="input-group mb-3 position-relative">
+                                        <div class="position-absolute top-50 start-50 translate-middle text-white">
+                                            Email
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div class="container">
+                                        <div class="container">
+                                            <div class="container">
+                                                <div class="container">
+                                                    <div class="input-group mb-3 position-relative">
+                                                        <input type="email" name="email" value="{{ user.email }}"
+                                                            class="form-control" size="20" maxlength="20"
+                                                            placeholder="Email" required id="id_email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer border-top border-white">
+                        <div class="container">
+                            <div class="d-flex justify-content-evenly">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            <button class="btn btn-primary">Confirm Changes</button>
+                                        </div>
+                                        <div class="col">
+                                            <a type="button" href="/profile" class="btn btn-secondary">Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        {% include 'index/signin-card.html' %}
+        {% endif %}
+    </body>
+
+    </html>
+</div>
+
+{% endblock %}
